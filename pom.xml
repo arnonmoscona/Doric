@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.moscona</groupId> <!-- FIXME change to a domain name -->
+    <artifactId>doric</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>com.moscona.doric</name>
+    <url>https://github.com/arnonmoscona/doric</url>
+    <description>
+        A high performance columnar, embeddable data store.
+    </description>
+    <licenses><license>
+        <name>GNU Lesser General Public License Version 3.0</name>
+        <url>http://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+    </license></licenses>
+    <developers>
+        <developer>
+            <name>Arnon Moscona</name>
+            <url>https://github.com/arnonmoscona</url>
+            <id>arnonmoscona</id>
+        </developer>
+    </developers>
+    <scm>
+        <url>scm:git:git@github.com:arnonmoscona/doric.git</url>
+    </scm>
+    <issueManagement>
+        <url>http://moscona.myjetbrains.com/youtrack/issues/DO</url>
+    </issueManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <groovy.version>2.3.0</groovy.version>
+        <!-- Amir's groovy version was 2.0.0-beta-1 -->
+        <groovy.gmaven.plugin>${groovy.version}</groovy.gmaven.plugin>
+        <groovy.easyb.plugin.version>${groovy.version}</groovy.easyb.plugin.version>
+        <easyb.include>*Story.story</easyb.include>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.moscona.common</groupId>
+            <artifactId>TestCoordinator</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>  <!-- this came from the intellitrade build file, constructed by Amir Gur -->
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>2.3.0</version>
+            <!-- Amir's groovy version was 2.0.0-beta-1 -->
+            <scope>test</scope>
+        </dependency>
+
+
+        <!-- dependency on EasyB to be removed, probably to be replaced by Spock -->
+        <dependency>  <!-- this came from the intellitrade build file, constructed by Amir Gur -->
+            <groupId>org.easyb</groupId>
+            <artifactId>easyb</artifactId>
+            <version>0.9.7</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>groovy-all</artifactId>
+                    <groupId>org.codehaus.groovy</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-cli</artifactId>
+                    <groupId>commons-cli</groupId>
+                </exclusion>
+            </exclusions>
+            <!-- <scope>test</scope> - short term workaround to disable this one.
+                was needed as non-test to allow keeping com.intellitrade.test.easyb.TestHelper under server/src
+                It will move to a test area and this can be re-added later -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.moscona.common</groupId>
+            <artifactId>util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.moscona</groupId>
+            <artifactId>math</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.10</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.apache.commons</groupId>-->
+            <!--<artifactId>commons-math</artifactId>-->
+            <!--<version>2.2</version>-->
+        <!--</dependency>-->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.6</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.easyb</groupId>
+                <artifactId>maven-easyb-plugin</artifactId>
+                <version>0.9.7-1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>${easyb.include}</include>
+                    </includes>
+                    <storyType>html</storyType>
+                    <storyReport>${project.build.directory}/easyb/stories.html</storyReport>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-all</artifactId>
+                        <version>${groovy.easyb.plugin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>commons-cli</groupId>
+                        <artifactId>commons-cli</artifactId>
+                        <version>1.2</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
